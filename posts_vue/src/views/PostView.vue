@@ -7,43 +7,14 @@
             </router-link>
         </div>
         <div class="post" v-if="post">
-            <div class="post-title">
-                <h1 class="font-medium text-3xl green mb-4">
-                    {{ post.title }}
-                </h1>
-            </div>
-            <div class="post-body">
-                <p>
-                    {{ post.body }}
-                </p>
-            </div>
-
-            <div class="post-user w-full justify-items-end">
-                <p class="text-gray-500 text-sm text-right mt-4">
-                    <span v-if="user && !userLoading">
-                        {{ user.name }}
-                    </span>
-                    <span v-else-if="userLoading">
-                        Ładowanie użytkownika...
-                    </span>
-                </p>
-            </div>
+            <Post :post="post" :user="user" :singular="true" />
             <div class="comments">
                 <h2 class="font-medium text-2xl green mb-4">
                     Komentarze
                 </h2>
                 <div v-if="comments && !commentsLoading">
                     <div class="comment border-l-2 border-gray-700 p-2 mb-2" v-for="comment in comments" :key="comment.id">
-                        <div class="comment-name">
-                            <p class="font-medium text-lg">
-                                {{ comment.name }}
-                            </p>
-                        </div>
-                        <div class="comment-body">
-                            <p class="text-gray-500 text-sm mb-2 pl-2">
-                                {{ comment.body }}
-                            </p>
-                        </div>
+                        <Comment :comment="comment" />
                     </div>
                 </div>
                 <div v-else-if="commentsLoading">
@@ -76,10 +47,14 @@
 <script>
 import axios from 'axios'
 import { RouterLink } from 'vue-router'
+import Comment from '../components/Comment.vue'
+import Post from '../components/Post.vue'
 export default {
     name: 'PostView',
     components: {
-        RouterLink
+        RouterLink,
+        Comment,
+        Post,
     },
     data() {
         return {
@@ -90,12 +65,13 @@ export default {
             user: {},
             userLoading: true,
             comments: [],
-            commentsLoading: true
+            commentsLoading: true,
+            id: this.$route.params.id,
         }
     },
     methods: {
         getPost() {
-            axios.get(`https://jsonplaceholder.typicode.com/posts/${this.$route.params.id}`)
+            axios.get(`https://jsonplaceholder.typicode.com/posts/${this.id}`)
                 .then(response => {
                     this.post = response.data
                     this.loading = false
@@ -122,7 +98,7 @@ export default {
                 })
         },
         getComments() {
-            axios.get(`https://jsonplaceholder.typicode.com/posts/${this.$route.params.id}/comments`)
+            axios.get(`https://jsonplaceholder.typicode.com/posts/${this.id}/comments`)
                 .then(response => {
                     this.comments = response.data
                     this.commentsLoading = false

@@ -1,5 +1,5 @@
 <template>
-    <div class="posts-page" v-if="!error">
+    <div class="posts-page flex flex-col" v-if="!error">
         <h1 class="font-medium text-3xl">
             Posty
         </h1>
@@ -17,25 +17,14 @@
                 Ładowanie postów...
             </p>
         </div>
-        <div class="posts" v-else-if="posts.length > 0">
-            <div v-for="post in paginatedPosts" :key="post.id"
-                class="post rounded-lg shadow-lg mb-4 p-0 mt-4 border border-gray-800 shadow-md">
-                <router-link :to="`/post/${post.id}`" class="clear block m-0 p-4">
-                    <h2 class="font-medium text-2xl">
-                        {{ trimWords(post.title, 4) }}
-                    </h2>
-                    <p v-if="users.length > 0 && users[post.userId]">
-                        {{ users[post.userId].name }}
-                    </p>
-                    <p v-else>
-                        Ładowanie użytkownika...
-                    </p>
-                    <div class="post-body">
-                        <p>
-                            {{ trimWords(post.body, 7) }}
-                        </p>
-                    </div>
-                </router-link>
+        <div class="posts flex flex-col grow justify-between" v-else-if="posts.length > 0">
+            <div class="posts">
+                <div v-for="post in paginatedPosts" :key="post.id"
+                    class="post rounded-lg shadow-lg mb-4 p-0 mt-4 border border-gray-800 shadow-md">
+                    <RouterLink :to="`/post/${post.id}`" class="clear block m-0 p-4">
+                        <Post :post="post" :user="users.find(user => user.id === post.userId)" />
+                    </RouterLink>
+                </div>
             </div>
             <div class="pagination flex justify-between items-center" v-if="pageCount > 1">
                 <button class="pagination-button bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
@@ -62,10 +51,12 @@
 <script>
 import axios from 'axios'
 import { RouterLink } from 'vue-router'
+import Post from '../components/Post.vue'
 export default {
     name: 'PostsView',
     components: {
-        RouterLink
+        RouterLink,
+        Post,
     },
     data() {
         return {

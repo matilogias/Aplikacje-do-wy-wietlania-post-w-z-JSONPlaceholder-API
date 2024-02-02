@@ -17,7 +17,7 @@ import MainHeading from './components/MainHeading.vue'
     </div>
   </header>
 
-  <RouterView style="max-height: 90vh; overflow-y: scroll;padding: 8px;" />
+  <RouterView style="height: 90vh; overflow-y: scroll;padding: 8px;" />
 </template>
 
 <style scoped>
