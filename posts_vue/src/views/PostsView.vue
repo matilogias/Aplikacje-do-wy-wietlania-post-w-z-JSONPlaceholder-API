@@ -22,7 +22,7 @@
                 <div v-for="post in paginatedPosts" :key="post.id"
                     class="post rounded-lg shadow-lg mb-4 p-0 mt-4 border border-gray-800 shadow-md">
                     <RouterLink :to="`/post/${post.id}`" class="clear block m-0 p-4">
-                        <Post :post="post" :user="users.find(user => user.id === post.userId)" />
+                        <Post :post="post" :user="users.find(user => user.id === post.userId) || {}" />
                     </RouterLink>
                 </div>
             </div>

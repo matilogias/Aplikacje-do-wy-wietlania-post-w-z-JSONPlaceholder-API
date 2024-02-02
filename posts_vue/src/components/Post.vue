@@ -11,10 +11,10 @@
         </p>
     </div>
     <p class="text-gray-500 text-sm text-right">
-        <span v-if="user">
+        <span v-if="user.name">
             {{ user.name }}
         </span>
-        <span v-else-if="userLoading">
+        <span v-else>
             Ładowanie użytkownika...
         </span>
     </p>
@@ -29,7 +29,7 @@ export default {
             required: true
         },
         user: {
-            type: Array,
+            type: Object,
             required: true
         },
         singular: {
